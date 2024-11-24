@@ -3,20 +3,46 @@ import Victory from '@/assets/victory.svg'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { signup } from '@/services/user.service'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 export function Auth() {
-    const [email,setEmail]=useState('')
-    const [password,setPassword]=useState('')
-    const [confirmPassword,setConfirmPassword]=useState('')
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
 
-   async function handleLogin(){
-    
-   }
+    function signupValidate() {
+        if (!name.length) {
+            toast.error("Name is required")
+            return false
+        }
+        if (!email.length) {
+            toast.error("Email is required")
+            return false
+        }
+        if (!password.length) {
+            toast.error("Password is required")
+            return false
+        }
+        if (password !== confirmPassword) {
+            toast.error("Passwords do not match")
+            return false
+        }
+        return true
+    }
 
-   async function handleSignup(){
+    async function handleLogin() {
 
-   }
+    }
+
+    async function handleSignup() {
+        if (signupValidate()) {
+            const res = await signup({name, email, password })
+            console.log('res:', res)
+        }
+    }
 
     return (
         <div className="h-[100vh] w-[100vw] flex items-center justify-center">
@@ -35,56 +61,63 @@ export function Auth() {
                     <div className='flex items-center justify-center w-full'>
                         <Tabs className='w-3/4'>
                             <TabsList className='bg-transparent rounded-none w-full'>
-                               <TabsTrigger value="login" 
-                               className="
+                                <TabsTrigger value="login"
+                                    className="
                                data-[state=active]:bg-transparent text-black text-opacity-90 border-b-2 rounded-none w-full data-[state=active]:text-black 
                                data-[state=active]:font-semibold
-                               data-[state=active]:border-b-purple-500 p-3 transition-all duration-300">Login</TabsTrigger> 
-                               <TabsTrigger value="signup"
-                               className="
+                               data-[state=active]:border-b-purple-500 p-3 transition-all duration-300">Login</TabsTrigger>
+                                <TabsTrigger value="signup"
+                                    className="
                                data-[state=active]:bg-transparent text-black text-opacity-90 border-b-2 rounded-none w-full data-[state=active]:text-black 
                                data-[state=active]:font-semibold
                                data-[state=active]:border-b-purple-500 p-3 transition-all duration-300"
-                               >Signup</TabsTrigger> 
+                                >Signup</TabsTrigger>
                             </TabsList>
                             <TabsContent className="flex flex-col gap-5 mt-10" value="login">
-                                <Input 
-                                placeholder='Email' 
-                                type='email' 
-                                className='rounded-full p-6' 
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                <Input
+                                    placeholder='Email'
+                                    type='email'
+                                    className='rounded-full p-6'
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
-                                <Input 
-                                placeholder='Password' 
-                                type='password' 
-                                className='rounded-full p-6' 
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                <Input
+                                    placeholder='Password'
+                                    type='password'
+                                    className='rounded-full p-6'
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                                 <Button className='rounded-full p-6' onClick={handleLogin}>Login</Button>
                             </TabsContent>
                             <TabsContent className="flex flex-col gap-5" value="signup">
-                            <Input 
-                                placeholder='Email' 
-                                type='email' 
-                                className='rounded-full p-6' 
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                <Input
+                                    placeholder='Name'
+                                    type='name'
+                                    className='rounded-full p-6'
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
                                 />
-                                <Input 
-                                placeholder='Password' 
-                                type='password' 
-                                className='rounded-full p-6' 
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                <Input
+                                    placeholder='Email'
+                                    type='email'
+                                    className='rounded-full p-6'
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
-                                <Input 
-                                placeholder='Confirm Password' 
-                                type='password' 
-                                className='rounded-full p-6' 
-                                value={password}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                <Input
+                                    placeholder='Password'
+                                    type='password'
+                                    className='rounded-full p-6'
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                                <Input
+                                    placeholder='Confirm Password'
+                                    type='password'
+                                    className='rounded-full p-6'
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
                                 />
                                 <Button className='rounded-full p-6' onClick={handleSignup}>Signup</Button>
                             </TabsContent>
