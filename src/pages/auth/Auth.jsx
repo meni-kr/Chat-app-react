@@ -3,11 +3,13 @@ import Victory from '@/assets/victory.svg'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { signup } from '@/services/user.service'
+import { login, signup } from '@/services/user.service'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
 export function Auth() {
+    const navigate = useNavigate()
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -33,14 +35,33 @@ export function Auth() {
         return true
     }
 
-    async function handleLogin() {
+    function loginValidate(){
+        if (!email.length) {
+            toast.error("Email is required")
+            return false
+        }
+        if (!password.length) {
+            toast.error("Password is required")
+            return false
+        }
+        return true
+    }
 
+    async function handleLogin() {
+        if(loginValidate()){
+            const res = await login({email,password})
+            if (res.success){
+                res.user.profileSetup? navigate("/chat") : navigate("/profile")
+            }
+        }
     }
 
     async function handleSignup() {
         if (signupValidate()) {
             const res = await signup({name, email, password })
-            console.log('res:', res)
+            if (res.success){
+                navigate("/profile")
+            }
         }
     }
 
@@ -59,7 +80,7 @@ export function Auth() {
                         <p className='font-medium text-center'> Fill in the details to get started with the best Chat App</p>
                     </div>
                     <div className='flex items-center justify-center w-full'>
-                        <Tabs className='w-3/4'>
+                        <Tabs className='w-3/4' defaultValue='login'>
                             <TabsList className='bg-transparent rounded-none w-full'>
                                 <TabsTrigger value="login"
                                     className="
