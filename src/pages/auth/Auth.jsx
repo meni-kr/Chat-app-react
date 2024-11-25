@@ -10,14 +10,14 @@ import { toast } from 'sonner'
 
 export function Auth() {
     const navigate = useNavigate()
-    const [name, setName] = useState('')
+    const [nickName, setNickName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
 
     function signupValidate() {
-        if (!name.length) {
-            toast.error("Name is required")
+        if (!nickName.length) {
+            toast.error("nickName is required")
             return false
         }
         if (!email.length) {
@@ -58,7 +58,7 @@ export function Auth() {
 
     async function handleSignup() {
         if (signupValidate()) {
-            const res = await signup({name, email, password })
+            const res = await signup({nickName, email, password })
             if (res.success){
                 navigate("/profile")
             }
@@ -113,11 +113,11 @@ export function Auth() {
                             </TabsContent>
                             <TabsContent className="flex flex-col gap-5" value="signup">
                                 <Input
-                                    placeholder='Name'
-                                    type='name'
+                                    placeholder='NickName'
+                                    type='nickName'
                                     className='rounded-full p-6'
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
+                                    value={nickName}
+                                    onChange={(e) => setNickName(e.target.value)}
                                 />
                                 <Input
                                     placeholder='Email'

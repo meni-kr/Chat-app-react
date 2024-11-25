@@ -3,10 +3,12 @@ import { Auth } from "./pages/auth/Auth";
 import { Chat } from "./pages/chat/Chat";
 import { Profile } from "./pages/profile/Profile";
 import { useSelector } from "react-redux";
+import { useState } from "react";
 
 
 export function RootCmp() {
   const user = useSelector(storeStage => storeStage.userModule.user)
+  
 
   const _privetRoute = ({ children }) => {
     const isAuthenticated = !!user

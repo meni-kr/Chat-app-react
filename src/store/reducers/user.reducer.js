@@ -9,7 +9,6 @@ const initialState = {
 }
 
 export function userReducer(state = initialState, action) {
-    console.log('action:', action)
     var newState = state
     switch (action.type) {
 
