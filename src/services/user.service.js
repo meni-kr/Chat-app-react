@@ -13,16 +13,17 @@ export const userService = {
 
 async function signup(newUser) {
     // if (!newUser.imgUrl) newUser.imgUrl = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
-    const user = await httpService.post(BASE_URL + 'signup', newUser)
-    if (user) return _setLoggedInUser(user)
+    const res = await httpService.post(BASE_URL + 'signup', newUser)
+    console.log('user:', res)
+    if (res.user) return _setLoggedInUser(res.user)
 }
 
 async function login(tryLogin) {
-    const user = await httpService.post(BASE_URL + 'login', tryLogin)
-    if (user) return _setLoggedInUser(user)
+    const res = await httpService.post(BASE_URL + 'login', tryLogin)
+    if (res.user) return _setLoggedInUser(res.user)
 }
 
-async function logout(tryLogin) {
+async function logout() {
     await httpService.post(BASE_URL + '/logout')
     sessionStorage.removeItem(STORAGE_KEY_LOGGED_IN_USER)
 }
