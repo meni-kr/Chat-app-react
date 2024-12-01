@@ -6,12 +6,12 @@ import { SET_USER } from "../reducers/user.reducer.js";
 
 export async function login(credentials) {
     try {
-        const user = await userService.login(credentials)
+        const res = await userService.login(credentials)
         store.dispatch({
             type: SET_USER,
-            user
+            user: res.user
         })
-        return user
+        return res
     } catch (err) {
         console.error('Cannot login', err)
         throw err
@@ -20,12 +20,12 @@ export async function login(credentials) {
 
 export async function signup(credentials) {
     try {
-        const user = await userService.signup(credentials)
+        const res = await userService.signup(credentials)
         store.dispatch({
             type: SET_USER,
-            user
+            user:res.user
         })
-        return user
+        return res
     } catch (err) {
         console.error('Cannot signup', err)
         throw err
@@ -42,5 +42,18 @@ export async function logout() {
     } catch (err) {
         console.error('Cannot logout', err)
         throw err
+    }
+}
+
+export async function updatedUser(credentials){
+    try {
+        const res = await userService.updateUser(credentials)
+        store.dispatch({
+            type: SET_USER,
+            user:res.user
+        })
+        return res
+    } catch (error) {
+        console.error("Cannot update the user: ",error)
     }
 }

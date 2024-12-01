@@ -35,7 +35,7 @@ export function Auth() {
         return true
     }
 
-    function loginValidate(){
+    function loginValidate() {
         if (!email.length) {
             toast.error("Email is required")
             return false
@@ -48,20 +48,31 @@ export function Auth() {
     }
 
     async function handleLogin() {
-        if(loginValidate()){
-            const res = await login({email,password})
-            if (res.success){
-                res.user.profileSetup? navigate("/chat") : navigate("/profile")
+        try {
+            if (loginValidate()) {
+                const res = await login({ email, password })
+                console.log('res:', res)
+                if (res.success) {
+                    console.log('hay');
+                    
+                    res.user.profileSetup ? navigate("/chat") : navigate("/profile")
+                }
             }
+        } catch (error) {
+            console.log('Error: ' + error)
         }
     }
 
     async function handleSignup() {
-        if (signupValidate()) {
-            const res = await signup({nickName, email, password })
-            if (res.success){
-                navigate("/profile")
+        try {
+            if (signupValidate()) {
+                const res = await signup({ nickName, email, password })
+                if (res.success) {
+                    navigate("/profile")
+                }
             }
+        } catch (error) {
+            console.log('Error: ' + error)
         }
     }
 
