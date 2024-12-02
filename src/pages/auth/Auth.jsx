@@ -11,8 +11,8 @@ import { toast } from 'sonner'
 export function Auth() {
     const navigate = useNavigate()
     const [nickName, setNickName] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('test@test.com')
+    const [password, setPassword] = useState('1234')
     const [confirmPassword, setConfirmPassword] = useState('')
 
     function signupValidate() {
@@ -51,10 +51,7 @@ export function Auth() {
         try {
             if (loginValidate()) {
                 const res = await login({ email, password })
-                console.log('res:', res)
                 if (res.success) {
-                    console.log('hay');
-                    
                     res.user.profileSetup ? navigate("/chat") : navigate("/profile")
                 }
             }

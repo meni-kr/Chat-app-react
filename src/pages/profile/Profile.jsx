@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { Avatar, AvatarImage } from "@/components/ui/avatar"
@@ -8,16 +8,19 @@ import { FaPlus, FaTrash } from "react-icons/fa"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
-import { updatedUser } from "@/store/actions/user.action"
+import { deleteProfileImage, updatedUser, updateProfileImage } from "@/store/actions/user.action"
+
+const HOST = import.meta.env.VITE_SERVER_URL
 
 export function Profile() {
     const navigate = useNavigate()
     const user = useSelector(storeState => storeState.userModule.user)
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
-    const [image, setImage] = useState(null)
+    const [firstName, setFirstName] = useState(user.firstName || '')
+    const [lastName, setLastName] = useState(user.lastName || '')
+    const [image, setImage] = useState(user.profileImage ? `${HOST}/${user.profileImage}` : null)
     const [hovered, setHovered] = useState(false)
-    const [selectedColor, setSelectedColor] = useState(0)
+    const [selectedColor, setSelectedColor] = useState(user.color || 0)
+    const fileInputRef = useRef(null)
 
     function validateProfile() {
         if (!firstName.length) {
@@ -34,17 +37,64 @@ export function Profile() {
     async function saveChanges() {
         if (validateProfile()) {
             try {
-                const res =await updatedUser({firstName,lastName,color:selectedColor})
+                const res = await updatedUser({ firstName, lastName, color: selectedColor })
+                if (res.success) {
+                    toast.success("Profile updated successfully")
+                    navigate("/chat")
+                }
             } catch (error) {
                 console.log('Error: ' + error)
             }
         }
     }
-    
+
+    function goBack() {
+        if (user.profileSetup) {
+            navigate("/chat")
+        } else {
+            toast.error("Please set up your profile")
+        }
+    }
+
+    function fileHandler() {
+        fileInputRef.current.click()
+    }
+
+    async function addImage(ev) {
+        try {
+            const file = ev.target.files[0]
+            if (file) {
+                const formDate = new FormData()
+                formDate.append("profile-image", file)
+                const res = await updateProfileImage(formDate)
+                if (res.success) {
+                    toast.success("Profile image updated successfully")
+                    setImage(`${HOST}/${user.profileImage}`)
+                }
+            }
+
+        } catch (error) {
+            console.log("Error adding profileImage:", error);
+        }
+    }
+
+    async function removeImage() {
+        try {
+            const res = await deleteProfileImage()
+            if (res.success) {
+                toast.success("Profile image removed successfully")
+                setImage(null)
+            }
+        } catch (error) {
+            console.log("Error removing profileImage:", error);
+
+        }
+    }
+
     return (
         <div className="bg-[#1b1c24] h-[100vh] flex items-center justify-center flex-col gap-10">
             <div className="flex flex-col gap-10 w-[80vw] md:w-max">
-                <div>
+                <div onClick={goBack}>
                     <IoArrowBack className="text-4xl lg:text-6xl text-white/90 cursor-pointer" />
                 </div>
                 <div className="grid grid-cols-2">
@@ -57,7 +107,7 @@ export function Profile() {
                                 image ? <AvatarImage src={image} alt="profile" className="object-cover w-full h-full bg-black" />
                                     : <div className={`uppercase h-32 w-32 md:h-48 md:w-48 text-5xl border-[1px] flex items-center justify-center rounded-full ${getColor(selectedColor)}`}>
                                         {
-                                            firstName ? firstName.charAt(0)
+                                            firstName ? firstName.charAt(0) + lastName.charAt(0)
                                                 : user.email.charAt(0)
 
                                         }
@@ -66,14 +116,16 @@ export function Profile() {
                         </Avatar>
                         {
                             hovered && (
-                                <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full cursor-pointer">
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full cursor-pointer"
+                                    onClick={image ? removeImage : fileHandler}
+                                >
                                     {
                                         image ? <FaTrash className="text-white text-3xl cursor-pointer" /> : <FaPlus className="text-white text-3xl cursor-pointer" />
                                     }
                                 </div>
                             )
                         }
-                        {/* <input type="text" /> */}
+                        <input type="file" ref={fileInputRef} className="hidden" onChange={addImage} name="profile-image" accept=".png,.jpg,.jpeg,.svg,.webp" />
                     </div>
                     <div className="flex min-w-32 md:min-w-64 flex-col gap-5 text-white items-center justify-center">
                         <div className="w-full">

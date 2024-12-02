@@ -9,13 +9,13 @@ export const userService = {
     logout,
     signup,
     getLoggedInUser,
-    updateUser
+    updateUser,
+    updateProfileImage,
+    deleteProfileImage
 }
 
 async function signup(newUser) {
-    // if (!newUser.imgUrl) newUser.imgUrl = 'https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_1280.png'
     const res = await httpService.post(BASE_URL + 'signup', newUser)
-    console.log('user:', res)
     if (res.user) {
         _setLoggedInUser(res.user)
         return res
@@ -31,14 +31,30 @@ async function login(tryLogin) {
 }
 
 async function logout() {
-    await httpService.post(BASE_URL + '/logout')
+    await httpService.post(BASE_URL + 'logout')
     sessionStorage.removeItem(STORAGE_KEY_LOGGED_IN_USER)
 }
 
 async function updateUser(userToUpdate) {
-    const res = await httpService.put(USER_URL +`/updateUser`, userToUpdate)
-    if (res.user) {
-        _setLoggedInUser(res.user)
+    const res = await httpService.put(USER_URL +`updateUser`, userToUpdate)
+    if (res.updatedUser) {
+        _setLoggedInUser(res.updatedUser)
+        return res
+    }
+}
+
+async function updateProfileImage(imageToUpdate) {
+    const res = await httpService.put(USER_URL +`updateProfileImage`, imageToUpdate)
+    if (res.updatedUser) {
+        _setLoggedInUser(res.updatedUser)
+        return res
+    }
+}
+
+async function deleteProfileImage(){
+    const res = await httpService.delete(USER_URL+`removeProfileImage`)
+    if (res.updatedUser) {
+        _setLoggedInUser(res.updatedUser)
         return res
     }
 }
