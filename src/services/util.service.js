@@ -1,5 +1,4 @@
-
-
+import animationData from "@/assets/lottie-json"
 
 export const colors = [
     "bg-[#712c4a57] text-[#ff006e] border-[1px] border-[#ff006faa]",
@@ -13,4 +12,10 @@ export function getColor(color) {
         return colors[color]
     }
     return colors[0]
+}
+
+export const animationDefaultOptions={
+    loop: true,
+    autoplay: true,
+    animationData
 }
