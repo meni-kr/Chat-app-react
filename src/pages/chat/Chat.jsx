@@ -16,9 +16,13 @@ export function Chat() {
         }
     }, [user, navigate])
 
+    async function logOut(){
+
+    }
+
     return (
         <div className="flex h-[100vh] text-white overflow-hidden">
-            <ContactsContainer/>
+            <ContactsContainer user={user} logOut={logOut}/>
             {/* <EmptyChatContainer/> */}
             <ChatContainer/>
         </div>
