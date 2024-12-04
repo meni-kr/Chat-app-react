@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { ContactsContainer } from "./cmps/contacts-container/ContactsContainer.jsx";
 import { EmptyChatContainer } from "./cmps/empty-chat-container/EmptyChatContainer.jsx";
 import { ChatContainer } from "./cmps/chat-container/ChatContainer.jsx";
+import { logout } from "@/store/actions/user.action.js";
 
 export function Chat() {
     const user = useSelector(storeStage => storeStage.userModule.user)
@@ -17,7 +18,15 @@ export function Chat() {
     }, [user, navigate])
 
     async function logOut(){
-
+        try {
+            const res = await logout()
+            if(res.success){
+                toast.success('You have logged out successfully')
+                navigate('/auth')
+            }
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     return (

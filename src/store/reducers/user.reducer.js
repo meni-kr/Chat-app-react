@@ -5,6 +5,7 @@ export const SET_USER = 'SET_USER'
 export const SET_USER_FIRST_LAST_NAME = 'SET_USER_FIRST_LAST_NAME'
 export const SET_USER_PROFILE_IMAGE = 'SET_USER_PROFILE_IMAGE'
 export const DELETE_PROFILE_IMAGE = 'DELETE_PROFILE_IMAGE'
+export const LOGOUT = 'LOGOUT'
 
 
 const initialState = {
@@ -29,6 +30,8 @@ export function userReducer(state = initialState, action) {
         case DELETE_PROFILE_IMAGE:
             newState = { ...state, user: action.user }
             break
+        case LOGOUT:
+            newState = { ...state, user: action.user }
 
         default:
     }

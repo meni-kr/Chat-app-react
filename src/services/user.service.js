@@ -30,13 +30,8 @@ async function login(tryLogin) {
     }
 }
 
-async function logout() {
-    await httpService.post(BASE_URL + 'logout')
-    sessionStorage.removeItem(STORAGE_KEY_LOGGED_IN_USER)
-}
-
 async function updateUser(userToUpdate) {
-    const res = await httpService.put(USER_URL +`updateUser`, userToUpdate)
+    const res = await httpService.put(USER_URL + `updateUser`, userToUpdate)
     if (res.updatedUser) {
         _setLoggedInUser(res.updatedUser)
         return res
@@ -44,17 +39,25 @@ async function updateUser(userToUpdate) {
 }
 
 async function updateProfileImage(imageToUpdate) {
-    const res = await httpService.put(USER_URL +`updateProfileImage`, imageToUpdate)
+    const res = await httpService.put(USER_URL + `updateProfileImage`, imageToUpdate)
     if (res.updatedUser) {
         _setLoggedInUser(res.updatedUser)
         return res
     }
 }
 
-async function deleteProfileImage(){
-    const res = await httpService.delete(USER_URL+`removeProfileImage`)
+async function deleteProfileImage() {
+    const res = await httpService.delete(USER_URL + `removeProfileImage`)
     if (res.updatedUser) {
         _setLoggedInUser(res.updatedUser)
+        return res
+    }
+}
+
+async function logout() {
+    const res = await httpService.post(BASE_URL + 'logout')
+    if (res.success) {
+        sessionStorage.removeItem(STORAGE_KEY_LOGGED_IN_USER)
         return res
     }
 }

@@ -5,7 +5,8 @@ import {
     SET_USER,
     SET_USER_FIRST_LAST_NAME,
     SET_USER_PROFILE_IMAGE,
-    DELETE_PROFILE_IMAGE
+    DELETE_PROFILE_IMAGE,
+    LOGOUT
 } from "../reducers/user.reducer.js";
 
 
@@ -37,19 +38,6 @@ export async function signup(credentials) {
     }
 }
 
-export async function logout() {
-    try {
-        await userService.logout()
-        store.dispatch({
-            type: SET_USER,
-            user: null
-        })
-    } catch (err) {
-        console.error('Cannot logout', err)
-        throw err
-    }
-}
-
 export async function updatedUser(credentials) {
     try {
         const res = await userService.updateUser(credentials)
@@ -73,6 +61,21 @@ export async function updateProfileImage(imageToUpdate) {
         return res
     } catch (error) {
         console.error("Cannot set profile image: ", error)
+    }
+
+}
+export async function logout() {
+    try {
+      const res= await userService.logout()
+      console.log('res:', res)
+        store.dispatch({
+            type: LOGOUT,
+            user: null
+        })
+        return res
+    } catch (err) {
+        console.error('Cannot logout', err)
+        throw err
     }
 }
 

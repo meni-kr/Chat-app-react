@@ -15,11 +15,10 @@ import { IoPowerSharp } from "react-icons/io5"
 const HOST = import.meta.env.VITE_SERVER_URL
 
 export function ProfileInfo({user,logOut}) {
-    // const user = useSelector(storeState => storeState.userModule.user)
     const navigate = useNavigate()
 
     function handleLogout(){
-
+        logOut()
     }
 
     return (
