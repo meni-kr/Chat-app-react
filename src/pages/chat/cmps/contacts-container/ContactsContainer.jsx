@@ -1,6 +1,7 @@
+import { NewDM } from "./cmps/new-dm/NewDM.jsx";
 import { ProfileInfo } from "./cmps/profile-info/ProfileInfo.jsx";
 
-export function ContactsContainer({user,logOut}) {
+export function ContactsContainer({user,logOut,searchContacts}) {
     return (
         <div className="relative md:w-[35vw] lg:w-[30vw] xl:w-[20vw] bg-[#1b1c24] border-r-2 border-[#2f303b] w-full">
             <div className="pt-3">
@@ -9,6 +10,7 @@ export function ContactsContainer({user,logOut}) {
             <div className="my-5">
                 <div className="flex items-center justify-between pr-10">
                     <Title text="Direct Messages" />
+                    <NewDM searchContacts={searchContacts}/>
                 </div>
             </div>
             <div className="my-5">

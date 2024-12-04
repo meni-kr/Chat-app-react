@@ -29,11 +29,15 @@ export function Chat() {
         }
     }
 
+    async function searchContacts(){
+
+    }
+
     return (
         <div className="flex h-[100vh] text-white overflow-hidden">
-            <ContactsContainer user={user} logOut={logOut}/>
+            <ContactsContainer user={user} logOut={logOut} searchContacts={searchContacts}/>
             {/* <EmptyChatContainer/> */}
-            <ChatContainer/>
+            {/* <ChatContainer/> */}
         </div>
     )
 }
