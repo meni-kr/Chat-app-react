@@ -1,13 +1,15 @@
 import { legacy_createStore as createStore, combineReducers } from 'redux'
 
 import { userReducer } from './reducers/user.reducer.js'
+import { chatReducer } from './reducers/chat.reducer.js'
 
 const rootReducer = combineReducers({
-    userModule: userReducer, 
+    userModule: userReducer,
+    chatModule: chatReducer
 })
 
 
-const middleware = (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__() : undefined
+const middleware = (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__() : undefined
 export const store = createStore(rootReducer, middleware)
 
 
