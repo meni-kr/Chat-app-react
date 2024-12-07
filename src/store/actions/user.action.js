@@ -75,7 +75,15 @@ export async function logout() {
         return res
     } catch (err) {
         console.error('Cannot logout', err)
-        throw err
+    }
+}
+
+export async function getContacts(searchTerm){
+    try {
+        const res = await userService.getContacts(searchTerm)
+        return res
+    } catch (error) {
+        console.error("Cannot get contacts: ", error)
     }
 }
 

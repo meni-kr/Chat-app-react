@@ -11,7 +11,8 @@ export const userService = {
     getLoggedInUser,
     updateUser,
     updateProfileImage,
-    deleteProfileImage
+    deleteProfileImage,
+    getContacts
 }
 
 async function signup(newUser) {
@@ -59,6 +60,19 @@ async function logout() {
     if (res.success) {
         sessionStorage.removeItem(STORAGE_KEY_LOGGED_IN_USER)
         return res
+    }
+}
+
+async function getContacts(term){
+    try {
+        console.log('searchTerm:', term)
+        const res = await httpService.get(`${USER_URL}getContacts/${term}`)
+        console.log('res:', res)
+        if (res.success) {
+            return res            
+        }
+    } catch (error) {
+        
     }
 }
 

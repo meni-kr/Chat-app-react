@@ -14,16 +14,24 @@ import {
 import { useState } from "react"
 import { FaPlus } from "react-icons/fa"
 import { Input } from "@/components/ui/input"
-import { animationDefaultOptions } from "@/services/util.service"
+import { animationDefaultOptions, getColor } from "@/services/util.service"
 import Lottie from "react-lottie";
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { AvatarProfileInfo } from "@/cmps/AvatarProfileInfo"
 
 
-export function NewDM({ searchContacts }) {
+export function NewDM({ searchContacts, searchedContacts, selectNewContact }) {
     const [openNewContactModal, setOpenNewContactModal] = useState(false)
-    const [searchedContacts, setSearchedContacts] = useState([])
+
 
     function handleSearchContacts(val) {
         searchContacts(val)
+    }
+
+    function handleSelectNewContact(contact) {
+        setOpenNewContactModal(false)
+        searchContacts([])
+        selectNewContact(contact)
     }
 
     return (
@@ -53,6 +61,30 @@ export function NewDM({ searchContacts }) {
                             onChange={(e) => handleSearchContacts(e.target.value)}
                         />
                     </div>
+                    <ScrollArea className="h-[250px]">
+                        <div className="flex flex-col gap-5">
+                            {
+                                searchedContacts.map(contact =>
+                                    <div key={contact._id}
+                                        className="flex gap-3 items-center cursor-pointer"
+                                        onClick={()=>handleSelectNewContact(contact)}
+                                    >
+                                        <AvatarProfileInfo user={contact} />
+                                        <div className="flex flex-col">
+                                            <span>
+                                                {
+                                                    contact.firstName && contact.lastName
+                                                        ? `${contact.firstName} ${contact.lastName}`
+                                                        : `${contact.email}`
+                                                }
+                                            </span>
+                                            <span className="text-xs">{contact.email}</span>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                        </div>
+                    </ScrollArea>
                     {
                         searchedContacts.length <= 0 && (<div className="flex-1 md:bg-[#1c1d25] md:flex mt-5 flex-col justify-center items-center duration-1000 transition-all">
                             <Lottie
