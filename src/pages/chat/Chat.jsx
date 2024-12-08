@@ -11,8 +11,12 @@ import { chatActions } from "@/store/actions/chat.action.js";
 export function Chat() {
     const user = useSelector(storeStage => storeStage.userModule.user)
     const selectedChatType = useSelector(storeStage => storeStage.chatModule.selectedChatType)
+    const selectedChatData = useSelector(storeStage => storeStage.chatModule.selectedChatData)
+
     const [searchedContacts, setSearchedContacts] = useState([])
     const navigate = useNavigate()
+
+
     useEffect(() => {
         if (!user.profileSetup) {
             toast('Please set up your profile')
@@ -52,6 +56,10 @@ export function Chat() {
         chatActions.setSelectedChatData(newContact)
     }
 
+    function closeChat(){
+        chatActions.closeChat()
+      }
+
     return (
         <div className="flex h-[100vh] text-white overflow-hidden">
             <ContactsContainer
@@ -63,7 +71,7 @@ export function Chat() {
             {
                 selectedChatType === undefined
                     ? <EmptyChatContainer />
-                    : <ChatContainer />
+                    : <ChatContainer closeChat={closeChat} selectedChatData={selectedChatData} selectedChatType={selectedChatType} />
             }
         </div>
     )
