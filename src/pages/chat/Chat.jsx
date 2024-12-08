@@ -6,9 +6,11 @@ import { ContactsContainer } from "./cmps/contacts-container/ContactsContainer.j
 import { EmptyChatContainer } from "./cmps/empty-chat-container/EmptyChatContainer.jsx";
 import { ChatContainer } from "./cmps/chat-container/ChatContainer.jsx";
 import { getContacts, logout } from "@/store/actions/user.action.js";
+import { chatActions } from "@/store/actions/chat.action.js";
 
 export function Chat() {
     const user = useSelector(storeStage => storeStage.userModule.user)
+    const selectedChatType = useSelector(storeStage => storeStage.chatModule.selectedChatType)
     const [searchedContacts, setSearchedContacts] = useState([])
     const navigate = useNavigate()
     useEffect(() => {
@@ -37,7 +39,7 @@ export function Chat() {
                 if (res?.success && res?.contacts) {
                     setSearchedContacts(res.contacts)
                 }
-            }else{
+            } else {
                 setSearchedContacts([])
             }
         } catch (error) {
@@ -46,7 +48,8 @@ export function Chat() {
     }
 
     function selectNewContact(newContact) {
-        console.log('newContact:', newContact)
+        chatActions.setSelectedChatType("contact")
+        chatActions.setSelectedChatData(newContact)
     }
 
     return (
@@ -57,8 +60,11 @@ export function Chat() {
                 searchContacts={searchContacts}
                 searchedContacts={searchedContacts}
                 selectNewContact={selectNewContact} />
-            {/* <EmptyChatContainer/> */}
-            {/* <ChatContainer/> */}
+            {
+                selectedChatType === undefined
+                    ? <EmptyChatContainer />
+                    : <ChatContainer />
+            }
         </div>
     )
 }

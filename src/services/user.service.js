@@ -65,9 +65,7 @@ async function logout() {
 
 async function getContacts(term){
     try {
-        console.log('searchTerm:', term)
         const res = await httpService.get(`${USER_URL}getContacts/${term}`)
-        console.log('res:', res)
         if (res.success) {
             return res            
         }
