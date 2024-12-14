@@ -8,6 +8,7 @@ import {
     DELETE_PROFILE_IMAGE,
     LOGOUT
 } from "../reducers/user.reducer.js";
+import { socketService } from "@/services/socket.service.js";
 
 
 export async function login(credentials) {
@@ -17,6 +18,7 @@ export async function login(credentials) {
             type: SET_USER,
             user: res.user
         })
+        socketService.login(res.user._id)
         return res
     } catch (err) {
         console.error('Cannot login', err)
@@ -64,14 +66,14 @@ export async function updateProfileImage(imageToUpdate) {
     }
 
 }
-export async function logout() {
+export async function logout(user) {
     try {
       const res= await userService.logout()
-      console.log('res:', res)
         store.dispatch({
             type: LOGOUT,
             user: null
         })
+        socketService.logout(user._id)
         return res
     } catch (err) {
         console.error('Cannot logout', err)

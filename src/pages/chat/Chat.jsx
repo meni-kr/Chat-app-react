@@ -26,7 +26,7 @@ export function Chat() {
 
     async function logOut() {
         try {
-            const res = await logout()
+            const res = await logout(user)
             if (res.success) {
                 toast.success('You have logged out successfully')
                 navigate('/auth')
